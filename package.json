@@ -1,0 +1,30 @@
+{
+  "name": "@mechazawa/bootstrap4-notify",
+  "version": "0.0.0",
+  "description": "Turns standard Bootstrap 4 alerts into \"Growl-like\" notifications. Port of bootstrap-notify by Robert McIntosh.",
+  "keywords": [
+    "bootstrap",
+    "bootstrap4",
+    "jquery",
+    "notify",
+    "notification",
+    "growl",
+    "alert"
+  ],
+  "license": "MIT",
+  "author": "Bas Bieling",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mechazawa/bootstrap4-notify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Mechazawa/bootstrap4-notify/issues"
+  },
+  "homepage": "https://github.com/Mechazawa/bootstrap4-notify#readme",
+  "type": "module",
+  "sideEffects": true,
+  "peerDependencies": {
+    "bootstrap": "^4.0.0",
+    "jquery": "^3.0.0 || ^4.0.0"
+  }
+}
