@@ -11,42 +11,20 @@
     "growl",
     "alert"
   ],
-  "license": "MIT",
-  "author": "Bas Bieling",
+  "homepage": "https://github.com/Mechazawa/bootstrap4-notify#readme",
+  "bugs": {
+    "url": "https://github.com/Mechazawa/bootstrap4-notify/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Mechazawa/bootstrap4-notify.git"
   },
-  "bugs": {
-    "url": "https://github.com/Mechazawa/bootstrap4-notify/issues"
-  },
-  "homepage": "https://github.com/Mechazawa/bootstrap4-notify#readme",
+  "license": "MIT",
+  "author": "Bas Bieling",
   "type": "module",
-  "sideEffects": true,
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@rollup/plugin-terser": "^1.0.2",
-    "@types/jquery": "^4.0.1",
-    "bootstrap": "^4.6.2",
-    "eslint": "^10.14.0",
-    "globals": "^17.14.0",
-    "jquery": "^3.7.1",
-    "jsdom": "^29.1.1",
-    "rollup": "^4.67.5",
-    "typescript": "^7.0.2",
-    "vitest": "^5.1.0"
-  },
-  "scripts": {
-    "lint": "eslint .",
-    "test": "vitest run",
-    "build": "rollup -c",
-    "prepublishOnly": "npm run lint && npm test && npm run build",
-    "typecheck": "tsc --noEmit --strict index.d.ts"
-  },
   "main": "./dist/bootstrap-notify.umd.cjs",
   "module": "./src/bootstrap-notify.js",
-  "unpkg": "./dist/bootstrap-notify.umd.min.js",
-  "jsdelivr": "./dist/bootstrap-notify.umd.min.js",
+  "types": "./index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
@@ -54,20 +32,40 @@
       "require": "./dist/bootstrap-notify.umd.cjs"
     }
   },
+  "unpkg": "./dist/bootstrap-notify.umd.min.js",
+  "jsdelivr": "./dist/bootstrap-notify.umd.min.js",
   "files": [
     "src",
     "dist",
     "index.d.ts"
   ],
-  "types": "./index.d.ts",
-  "peerDependenciesMeta": {
-    "@types/jquery": {
-      "optional": true
-    }
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run",
+    "build": "rollup -c",
+    "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build",
+    "typecheck": "tsc --noEmit --strict index.d.ts"
   },
   "peerDependencies": {
     "bootstrap": "^4.0.0",
     "jquery": "^3.0.0 || ^4.0.0",
     "@types/jquery": "^3.0.0 || ^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/jquery": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@rollup/plugin-terser": "^1.0.2",
+    "@types/jquery": "^4.0.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "jquery": "^3.7.1",
+    "jsdom": "^29.1.1",
+    "rollup": "^4.67.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
   }
 }
