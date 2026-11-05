@@ -138,7 +138,7 @@ class Notify {
                 break;
             }
             case 'progress':
-                this.remainingDelay = this.settings.delay - (this.settings.delay * (value / 100));
+                this.$ele.data('notify-delay', this.settings.delay - (this.settings.delay * (value / 100)));
                 this.setProgress(value);
                 break;
             case 'url':
@@ -279,25 +279,21 @@ class Notify {
             });
         }
 
-        this.isHovered = false;
         this.$ele
-            .on('mouseover', () => {
-                this.isHovered = true;
-            })
-            .on('mouseout', () => {
-                this.isHovered = false;
-            });
+            .data('data-hover', 'false')
+            .on('mouseover', () => this.$ele.data('data-hover', 'true'))
+            .on('mouseout', () => this.$ele.data('data-hover', 'false'));
 
         if (settings.delay <= 0) {
             return;
         }
 
-        this.remainingDelay = settings.delay;
+        this.$ele.data('notify-delay', settings.delay);
         this.timer = setInterval(() => {
-            const remaining = this.remainingDelay - settings.timer;
+            const remaining = parseInt(this.$ele.data('notify-delay')) - settings.timer;
 
-            if (!this.isHovered || settings.mouse_over !== 'pause') {
-                this.remainingDelay = remaining;
+            if (this.$ele.data('data-hover') === 'false' || settings.mouse_over !== 'pause') {
+                this.$ele.data('notify-delay', remaining);
                 this.setProgress(((settings.delay - remaining) / settings.delay) * 100);
             }
 

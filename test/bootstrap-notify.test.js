@@ -108,6 +108,26 @@ describe('update', () => {
     });
 });
 
+describe('countdown', () => {
+    it('keeps the remaining delay in the notify-delay data of $ele', () => {
+        const notification = notify('Hello', { delay: 5000, timer: 1000 });
+
+        vi.advanceTimersByTime(2000);
+
+        expect(notification.$ele.data('notify-delay')).toBe(3000);
+    });
+
+    it('pauses while hovered when mouse_over is pause', () => {
+        const notification = notify('Hello', { delay: 5000, timer: 1000, mouse_over: 'pause' });
+
+        notification.$ele.trigger('mouseover');
+        vi.advanceTimersByTime(3000);
+
+        expect(notification.$ele.data('data-hover')).toBe('true');
+        expect(notification.$ele.data('notify-delay')).toBe(5000);
+    });
+});
+
 describe('closing', () => {
     it('closes after the delay and removes the element', () => {
         const onClosed = vi.fn();
