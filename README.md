@@ -45,7 +45,7 @@ Load jQuery first. The script adds the functions to the global `jQuery` and to `
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mechazawa/bootstrap4-notify@1.0.0/dist/bootstrap-notify.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mechazawa/bootstrap4-notify@1/dist/bootstrap-notify.umd.min.js"></script>
 ```
 
 ## API
@@ -88,7 +88,7 @@ Load jQuery first. The script adds the functions to the global `jQuery` and to `
 | `onShown` | `null` | Runs after the open animation. `this` is the DOM element. |
 | `onClose` | `null` | Runs when the notification starts to close. `this` is the jQuery element. |
 | `onClosed` | `null` | Runs after the notification is removed. `this` is the DOM element. |
-| `onClick` | `null` | Runs on a click on the notification, except on the close button. |
+| `onClick` | `null` | Runs on a click on the notification, except on the close button. `this` is the DOM element. |
 | `icon_type` | `'class'` | `'class'` or `'image'`. |
 | `template` | see below | HTML template. |
 
@@ -154,6 +154,7 @@ The plugin does not change the classes in a custom `template`. Update them for B
 - In `onShown` and `onClosed`, `this` is always the notification element. In the original, it was `window` when no CSS animation ran.
 - `update({ icon })` stores the new icon, so the next icon update removes the correct class. With `icon_type: 'image'`, it also changes the `src` of an `<img>` inside the icon element.
 - `$.notifyClose` and `$.notifyCloseExcept` also accept the types `primary`, `secondary`, `light` and `dark`.
+- A click on an element inside the close button does not run `onClick`. In the original, only a click on the button itself was excluded.
 
 ## Development
 
