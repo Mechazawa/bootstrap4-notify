@@ -27,9 +27,14 @@
   "types": "./index.d.ts",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "import": "./src/bootstrap-notify.js",
-      "require": "./dist/bootstrap-notify.umd.cjs"
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./src/bootstrap-notify.js"
+      },
+      "require": {
+        "types": "./index.d.cts",
+        "default": "./dist/bootstrap-notify.umd.cjs"
+      }
     }
   },
   "unpkg": "./dist/bootstrap-notify.umd.min.js",
@@ -37,12 +42,13 @@
   "files": [
     "src",
     "dist",
-    "index.d.ts"
+    "index.d.ts",
+    "index.d.cts"
   ],
   "scripts": {
     "lint": "eslint .",
     "test": "vitest run",
-    "build": "rollup -c",
+    "build": "rollup -c && cp index.d.ts index.d.cts",
     "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build",
     "typecheck": "tsc --noEmit --strict index.d.ts"
   },
