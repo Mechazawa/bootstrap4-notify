@@ -23,8 +23,12 @@
   "homepage": "https://github.com/Mechazawa/bootstrap4-notify#readme",
   "type": "module",
   "sideEffects": true,
-  "peerDependencies": {
-    "bootstrap": "^4.0.0",
-    "jquery": "^3.0.0 || ^4.0.0"
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0"
+  },
+  "scripts": {
+    "lint": "eslint ."
   }
 }
