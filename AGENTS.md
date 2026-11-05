@@ -1,6 +1,6 @@
 # Agent notes
 
-- Checks: `npm run lint`, `npm test`, `npm run typecheck`, `npm run build`. `prepublishOnly` runs lint, tests and build.
+- Checks: `npm run lint`, `npm test`, `npm run typecheck`, `npm run build`, `npm run attw` (needs a build first, it checks the packed types). `prepublishOnly` runs all of them.
 - `src/bootstrap-notify.js` is the published ES module. Rollup builds only the UMD files in `dist/`.
 - The package has `"type": "module"`, so the UMD file for `require()` must end in `.cjs`. A `.js` file in `dist/` loads as ESM in Node and breaks `require()`.
 - The tests run in jsdom with fake timers. jsdom runs no CSS animations, so closing always takes the 600 ms fallback path.

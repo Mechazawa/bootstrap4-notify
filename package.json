@@ -49,13 +49,14 @@
     "lint": "eslint .",
     "test": "vitest run",
     "build": "rollup -c && cp index.d.ts index.d.cts",
-    "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build",
-    "typecheck": "tsc --noEmit --strict index.d.ts"
+    "prepublishOnly": "npm run lint && npm run typecheck && npm test && npm run build && npm run attw",
+    "typecheck": "tsc --noEmit --strict index.d.ts",
+    "attw": "attw --pack ."
   },
   "peerDependencies": {
+    "@types/jquery": "^3.0.0 || ^4.0.0",
     "bootstrap": "^4.0.0",
-    "jquery": "^3.0.0 || ^4.0.0",
-    "@types/jquery": "^3.0.0 || ^4.0.0"
+    "jquery": "^3.0.0 || ^4.0.0"
   },
   "peerDependenciesMeta": {
     "@types/jquery": {
@@ -63,6 +64,7 @@
     }
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
     "@eslint/js": "^10.0.1",
     "@rollup/plugin-terser": "^1.0.2",
     "@types/jquery": "^4.0.1",

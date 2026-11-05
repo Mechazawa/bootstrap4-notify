@@ -164,6 +164,7 @@ npm run lint
 npm test
 npm run typecheck
 npm run build
+npm run attw
 ```
 
 ## License
