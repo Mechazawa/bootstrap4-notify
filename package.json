@@ -25,15 +25,33 @@
   "sideEffects": true,
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@rollup/plugin-terser": "^1.0.2",
     "bootstrap": "^4.6.2",
     "eslint": "^10.14.0",
     "globals": "^17.14.0",
     "jquery": "^3.7.1",
     "jsdom": "^29.1.1",
+    "rollup": "^4.67.5",
     "vitest": "^5.1.0"
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "vitest run"
-  }
+    "test": "vitest run",
+    "build": "rollup -c",
+    "prepublishOnly": "npm run lint && npm test && npm run build"
+  },
+  "main": "./dist/bootstrap-notify.umd.cjs",
+  "module": "./src/bootstrap-notify.js",
+  "unpkg": "./dist/bootstrap-notify.umd.min.js",
+  "jsdelivr": "./dist/bootstrap-notify.umd.min.js",
+  "exports": {
+    ".": {
+      "import": "./src/bootstrap-notify.js",
+      "require": "./dist/bootstrap-notify.umd.cjs"
+    }
+  },
+  "files": [
+    "src",
+    "dist"
+  ]
 }
