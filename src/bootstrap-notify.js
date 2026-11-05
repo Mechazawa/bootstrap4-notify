@@ -394,4 +394,4 @@ export const notifyCloseExcept = (selector) => {
     $('[data-notify]').not(except).find('[data-notify="dismiss"]').trigger('click');
 };
 
-Object.assign($, { notify, notifyDefaults, notifyClose, notifyCloseExcept });
+$.extend({ notify, notifyDefaults, notifyClose, notifyCloseExcept });
