@@ -65,8 +65,8 @@ export interface NotifyInstance {
 /** Returns undefined when `allow_duplicates` is false and the same notification is already open. */
 export function notify(content: string | NotifyContent, settings?: NotifySettings): NotifyInstance | undefined;
 export function notifyDefaults(settings: NotifySettings): NotifySettings;
-export function notifyClose(selector?: 'all' | NotifyType | NotifyPosition | string): void;
-export function notifyCloseExcept(selector: NotifyType | string): void;
+export function notifyClose(selector?: 'all' | NotifyType | NotifyPosition): void;
+export function notifyCloseExcept(selector: NotifyType): void;
 
 declare global {
     interface JQueryStatic {
