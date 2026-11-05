@@ -25,10 +25,15 @@
   "sideEffects": true,
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "bootstrap": "^4.6.2",
     "eslint": "^10.14.0",
-    "globals": "^17.14.0"
+    "globals": "^17.14.0",
+    "jquery": "^3.7.1",
+    "jsdom": "^29.1.1",
+    "vitest": "^5.1.0"
   },
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "vitest run"
   }
 }
