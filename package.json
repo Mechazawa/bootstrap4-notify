@@ -1,6 +1,6 @@
 {
   "name": "@mechazawa/bootstrap4-notify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Turns standard Bootstrap 4 alerts into \"Growl-like\" notifications. Port of bootstrap-notify by Robert McIntosh.",
   "keywords": [
     "bootstrap",
