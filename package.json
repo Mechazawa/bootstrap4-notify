@@ -26,19 +26,22 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@rollup/plugin-terser": "^1.0.2",
+    "@types/jquery": "^4.0.1",
     "bootstrap": "^4.6.2",
     "eslint": "^10.14.0",
     "globals": "^17.14.0",
     "jquery": "^3.7.1",
     "jsdom": "^29.1.1",
     "rollup": "^4.67.5",
+    "typescript": "^7.0.2",
     "vitest": "^5.1.0"
   },
   "scripts": {
     "lint": "eslint .",
     "test": "vitest run",
     "build": "rollup -c",
-    "prepublishOnly": "npm run lint && npm test && npm run build"
+    "prepublishOnly": "npm run lint && npm test && npm run build",
+    "typecheck": "tsc --noEmit --strict index.d.ts"
   },
   "main": "./dist/bootstrap-notify.umd.cjs",
   "module": "./src/bootstrap-notify.js",
@@ -46,12 +49,25 @@
   "jsdelivr": "./dist/bootstrap-notify.umd.min.js",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "import": "./src/bootstrap-notify.js",
       "require": "./dist/bootstrap-notify.umd.cjs"
     }
   },
   "files": [
     "src",
-    "dist"
-  ]
+    "dist",
+    "index.d.ts"
+  ],
+  "types": "./index.d.ts",
+  "peerDependenciesMeta": {
+    "@types/jquery": {
+      "optional": true
+    }
+  },
+  "peerDependencies": {
+    "bootstrap": "^4.0.0",
+    "jquery": "^3.0.0 || ^4.0.0",
+    "@types/jquery": "^3.0.0 || ^4.0.0"
+  }
 }
