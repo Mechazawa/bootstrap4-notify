@@ -6,13 +6,7 @@ export default [
     js.configs.recommended,
     {
         languageOptions: {
-            globals: { ...globals.browser },
-        },
-    },
-    {
-        files: ['*.config.js'],
-        languageOptions: {
-            globals: { ...globals.node },
+            globals: globals.browser,
         },
     },
 ];
