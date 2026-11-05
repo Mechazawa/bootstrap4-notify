@@ -42,33 +42,14 @@ let defaults = {
     template: '<div data-notify="container" class="col-11 col-sm-4 alert alert-{0}" role="alert"><button type="button" class="close" aria-label="Close" data-notify="dismiss"><span aria-hidden="true">&times;</span></button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar bg-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>',
 };
 
-// `{n}` takes the n-th value; `{{n}}` stays as it is.
-const formatTemplate = (template, ...values) => template.replace(
-    /\{\{\d\}\}|\{\d\}/g,
-    (token) => (token.startsWith('{{') ? token : values[Number(token[1])]),
-);
-
-const invoke = (callback, context, ...args) => {
+const invoke = (callback, context) => {
     if (typeof callback === 'function') {
-        callback.call(context, ...args);
+        callback.call(context);
     }
 };
 
 // Parse through the DOM so equal markup compares equal (`<br>` and `<br />`).
 const normalizeHtml = (html) => $('<div>').html(String(html)).html().trim();
-
-const isDuplicate = ({ type, content }) => {
-    const title = normalizeHtml(content.title);
-    const message = normalizeHtml(content.message);
-
-    return $('[data-notify="container"]').toArray().some((element) => {
-        const $element = $(element);
-
-        return $element.find('[data-notify="title"]').html().trim() === title
-            && $element.find('[data-notify="message"]').html().trim() === message
-            && $element.hasClass(`alert-${type}`);
-    });
-};
 
 class Notify {
     constructor(content, options) {
@@ -92,29 +73,11 @@ class Notify {
             this.settings.offset = { x: this.settings.offset, y: this.settings.offset };
         }
 
-        if (this.settings.allow_duplicates || !isDuplicate(this.settings)) {
-            this.init();
+        if (!this.settings.allow_duplicates && this.isDuplicate()) {
+            return;
         }
-    }
 
-    get positionSelector() {
-        const { from, align } = this.settings.placement;
-
-        return `[data-notify-position="${from}-${align}"]:not([data-closing="true"])`;
-    }
-
-    init() {
         this.buildNotify();
-
-        if (this.settings.content.icon) {
-            this.setIcon();
-        }
-
-        if (this.settings.content.url !== '#') {
-            this.styleURL();
-        }
-
-        this.styleDismiss();
         this.placement();
         this.bind();
 
@@ -129,6 +92,26 @@ class Notify {
             },
             close: () => this.close(),
         };
+    }
+
+    isDuplicate() {
+        const { type, content } = this.settings;
+        const title = normalizeHtml(content.title);
+        const message = normalizeHtml(content.message);
+
+        return $('[data-notify="container"]').toArray().some((element) => {
+            const $element = $(element);
+
+            return $element.find('[data-notify="title"]').html().trim() === title
+                && $element.find('[data-notify="message"]').html().trim() === message
+                && $element.hasClass(`alert-${type}`);
+        });
+    }
+
+    get positionSelector() {
+        const { from, align } = this.settings.placement;
+
+        return `[data-notify-position="${from}-${align}"]:not([data-closing="true"])`;
     }
 
     applyUpdate(name, value) {
@@ -176,53 +159,52 @@ class Notify {
     }
 
     buildNotify() {
-        const { content, placement, template, type } = this.settings;
+        const { allow_dismiss, content, icon_type, placement, showProgressbar, template, type, z_index } = this.settings;
+        const values = [type, content.title, content.message, content.url, content.target];
 
-        this.$ele = $(formatTemplate(template, type, content.title, content.message, content.url, content.target))
+        // `{n}` takes the n-th value; `{{n}}` stays as it is.
+        this.$ele = $(template.replace(/\{\{\d\}\}|\{\d\}/g, (token) => (token.startsWith('{{') ? token : values[token[1]])))
             .attr('data-notify-position', `${placement.from}-${placement.align}`);
 
-        if (!this.settings.allow_dismiss) {
-            this.$ele.find('[data-notify="dismiss"]').css('display', 'none');
-        }
-
-        if (!this.settings.showProgressbar) {
-            this.$ele.find('[data-notify="progressbar"]').remove();
-        }
-    }
-
-    setIcon() {
-        const { icon } = this.settings.content;
-        const $icon = this.$ele.find('[data-notify="icon"]');
-
-        if (this.settings.icon_type.toLowerCase() === 'class') {
-            $icon.addClass(icon);
-        } else if ($icon.is('img')) {
-            $icon.attr('src', icon);
-        } else {
-            $icon.append($('<img alt="Notify Icon">').attr('src', icon));
-        }
-    }
-
-    styleDismiss() {
-        this.$ele.find('[data-notify="dismiss"]').css({
+        const $dismiss = this.$ele.find('[data-notify="dismiss"]').css({
             position: 'absolute',
             right: '10px',
             top: '5px',
-            zIndex: this.settings.z_index + 2,
+            zIndex: z_index + 2,
         });
-    }
 
-    styleURL() {
-        // A transparent background image keeps the overlay link clickable in old Internet Explorer.
-        this.$ele.find('[data-notify="url"]').css({
-            backgroundImage: 'url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)',
-            height: '100%',
-            left: 0,
-            position: 'absolute',
-            top: 0,
-            width: '100%',
-            zIndex: this.settings.z_index + 1,
-        });
+        if (!allow_dismiss) {
+            $dismiss.css('display', 'none');
+        }
+
+        if (!showProgressbar) {
+            this.$ele.find('[data-notify="progressbar"]').remove();
+        }
+
+        if (content.icon) {
+            const $icon = this.$ele.find('[data-notify="icon"]');
+
+            if (icon_type.toLowerCase() === 'class') {
+                $icon.addClass(content.icon);
+            } else if ($icon.is('img')) {
+                $icon.attr('src', content.icon);
+            } else {
+                $icon.append($('<img alt="Notify Icon">').attr('src', content.icon));
+            }
+        }
+
+        if (content.url !== '#') {
+            // A transparent background image keeps the overlay link clickable in old Internet Explorer.
+            this.$ele.find('[data-notify="url"]').css({
+                backgroundImage: 'url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)',
+                height: '100%',
+                left: 0,
+                position: 'absolute',
+                top: 0,
+                width: '100%',
+                zIndex: z_index + 1,
+            });
+        }
     }
 
     placement() {
@@ -236,7 +218,7 @@ class Notify {
             zIndex: settings.z_index,
         };
 
-        let offset = settings.newest_on_top
+        const offset = settings.newest_on_top
             ? settings.offset.y
             : $(this.positionSelector).toArray().reduce(
                 (max, element) => Math.max(max, parseInt($(element).css(from)) + $(element).outerHeight() + parseInt(settings.spacing)),
@@ -252,12 +234,10 @@ class Notify {
             css[align] = `${settings.offset.x}px`;
         }
 
-        this.$ele.css(css).addClass(settings.animate.enter);
-        $(settings.element).append(this.$ele);
+        this.$ele.css(css).addClass(settings.animate.enter).appendTo(settings.element);
 
         if (settings.newest_on_top) {
-            offset = parseInt(offset) + parseInt(settings.spacing) + this.$ele.outerHeight();
-            this.reposition(offset);
+            this.reposition(parseInt(offset) + parseInt(settings.spacing) + this.$ele.outerHeight());
         }
 
         invoke(settings.onShow, this.$ele);
