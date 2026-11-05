@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from 'vitest';
 import { notify, notifyClose, notifyCloseExcept, notifyDefaults } from '../src/bootstrap-notify.js';
 
 const containers = () => $('[data-notify="container"]');
@@ -147,6 +147,7 @@ describe('closing', () => {
     });
 
     it.each([
+        [undefined, 0],
         ['all', 0],
         ['danger', 2],
         ['bottom-left', 2],
@@ -159,15 +160,6 @@ describe('closing', () => {
         notifyClose(selector);
 
         expect(openContainers()).toHaveLength(remaining);
-    });
-
-    it('notifyClose() without a selector closes everything', () => {
-        notify('A');
-        notify('B');
-
-        notifyClose();
-
-        expect(openContainers()).toHaveLength(0);
     });
 
     it('notifyCloseExcept keeps the notifications of the given type', () => {
@@ -192,12 +184,11 @@ describe('jQuery integration', () => {
     it('merges notifyDefaults into later notifications', () => {
         const previous = notifyDefaults({});
 
+        onTestFinished(() => notifyDefaults(previous));
         notifyDefaults({ type: 'warning', placement: { from: 'bottom' } });
         notify('Hello');
 
         expect(containers().hasClass('alert-warning')).toBe(true);
         expect(containers().attr('data-notify-position')).toBe('bottom-right');
-
-        notifyDefaults(previous);
     });
 });
