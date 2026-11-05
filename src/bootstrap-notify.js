@@ -6,7 +6,7 @@
 
 import $ from 'jquery';
 
-const CONTEXTUAL_TYPES = ['success', 'info', 'warning', 'danger'];
+const CONTEXTUAL_TYPES = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
 const POSITION_PATTERN = /^(top|bottom)-(left|center|right)$/;
 const ANIMATION_FALLBACK_MS = 600;
 
@@ -39,7 +39,7 @@ let defaults = {
     onClosed: null,
     onClick: null,
     icon_type: 'class',
-    template: '<div data-notify="container" class="col-xs-11 col-sm-4 alert alert-{0}" role="alert"><button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>',
+    template: '<div data-notify="container" class="col-11 col-sm-4 alert alert-{0}" role="alert"><button type="button" class="close" aria-label="Close" data-notify="dismiss"><span aria-hidden="true">&times;</span></button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar bg-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>',
 };
 
 // `{n}` takes the n-th value; `{{n}}` stays as it is.
@@ -136,11 +136,11 @@ class Notify {
             case 'type':
                 this.$ele.removeClass(`alert-${this.settings.type}`)
                     .find('[data-notify="progressbar"] > .progress-bar')
-                    .removeClass(`progress-bar-${this.settings.type}`);
+                    .removeClass(`bg-${this.settings.type}`);
                 this.settings.type = value;
                 this.$ele.addClass(`alert-${value}`)
                     .find('[data-notify="progressbar"] > .progress-bar')
-                    .addClass(`progress-bar-${value}`);
+                    .addClass(`bg-${value}`);
                 break;
             case 'icon': {
                 const $icon = this.$ele.find('[data-notify="icon"]');
@@ -293,7 +293,7 @@ class Notify {
 
         if (typeof settings.onClick === 'function') {
             this.$ele.on('click', (event) => {
-                if (event.target !== $dismiss[0]) {
+                if (!$(event.target).closest($dismiss).length) {
                     settings.onClick.call(event.currentTarget, event);
                 }
             });
